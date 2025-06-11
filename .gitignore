@@ -14,7 +14,7 @@ target/
 .sts4-cache
 
 # Maven
-qtarget/
+target/
 
 # Logs
 *.log
