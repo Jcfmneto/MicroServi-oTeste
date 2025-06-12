@@ -7,6 +7,7 @@ import com.example.demo.model.Pagamento;
 import com.example.demo.model.Status;
 import com.example.demo.repository.PagamentosRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class PagamentoService {
         return repository.findAll(paginacao).map(PagamentoMapper::toDTO);
     }
 
+    @Transactional
     public PagamentoDto criarPagamento(PagamentoDto dto){
         Pagamento entity = PagamentoMapper.toEntity(dto);
         entity.setStatus(Status.CRIADO);
@@ -36,14 +38,14 @@ public class PagamentoService {
         return repository.findById(id).map(PagamentoMapper::toDTO).orElseThrow(EntityNotFoundException::new);
     }
 
-
+    @Transactional
     public PagamentoDto atualizarPagamento(PagamentoDto dto, Long id){
         Pagamento entity = PagamentoMapper.toEntity(dto);
         entity.setId(id);
         repository.save(entity);
         return PagamentoMapper.toDTO(entity);
     }
-
+    @Transactional
     public void deletarPagamento(Long id){
         repository.deleteById(id);
     }

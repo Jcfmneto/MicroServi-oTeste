@@ -32,7 +32,7 @@ public class PagamentoController {
         return ResponseEntity.ok(pagamentos);
     }
 
-    @GetMapping
+    @GetMapping("/id")
     public ResponseEntity<PagamentoDto> obterPagamentoPorId(@RequestParam @NotNull Long id){
         PagamentoDto pagamento = service.obterPorId(id);
         return ResponseEntity.ok(pagamento);
@@ -45,11 +45,15 @@ public class PagamentoController {
     }
 
     @PostMapping
-    public ResponseEntity<PagamentoDto> cadastrar(@RequestBody @Valid PagamentoDto dto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<PagamentoDto> cadastrar(@RequestBody @Valid PagamentoDto dto) {
         PagamentoDto pagamento = service.criarPagamento(dto);
-        URI endereco = uriBuilder.path("/pagamentos/{id}").buildAndExpand(pagamento.id()).toUri();
-
+        URI endereco = URI.create("/pagamentos/" + pagamento.id());
         return ResponseEntity.created(endereco).body(pagamento);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable @NotNull Long id){
+        service.deletarPagamento(id);
+        return  ResponseEntity.noContent().build();
     }
 
 
